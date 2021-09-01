@@ -1,0 +1,55 @@
+version: "3"
+volumes:
+  db_laravel_data: {}
+services:
+  laravel_db:
+    container_name: laravel_db
+    image: mysql:8
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/db:/var/lib/mysql
+      - ./mysql/custom.cnf:/etc/mysql/conf.d/custom.cnf
+      - ./mysql/init_data:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: g32*9hhaW99
+      MYSQL_DATABASE: laravel
+      TZ: UTC
+  # bsbt_web:
+  #   container_name: bsbt_web
+  #   build: ./php
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ../bsbt_staking/:/var/www/html
+  #     - ./logs/:/etc/httpd/logs/
+  #   depends_on:
+  #     - bsbt_db
+  # bsbt_redis:
+  #   container_name: bsbt_redis
+  #   restart: always
+  #   image: redis:latest
+  #   volumes:
+  #     - ./data/redis:/data
+  #   ports:
+  #     - "6379:6379"
+  #   command: redis-server --appendonly yes --requirepass docker
+  # bsbt_pma:
+  #   container_name: bsbt_pma
+  #   image: phpmyadmin/phpmyadmin
+  #   restart: unless-stopped
+  #   environment:
+  #     PMA_ARBITRARY: 1
+  #     PMA_HOST: bsbt_db
+  #     PMA_USER: root
+  #     PMA_PASSWORD: root
+  #   ports:
+  #     - 8800:80
+  #   links:
+  #     - bsbt_db
+  #   depends_on:
+  #     - bsbt_db
